@@ -9,5 +9,5 @@ namespace MoviesAPI.Models
         public string PrimaryTitle { get; set; } = null!;
         public string OriginalTitle { get; set; } = null!;
         public string StartYear { get; set; } = null!;
-    }
+    } 
 }

@@ -10,9 +10,9 @@ namespace MoviesAPI.Controllers;
 
 public class NameController : ControllerBase
 {
-    private readonly MoviesAPIContext _context;
+    private readonly MoviesDbContext _context;
 
-    public NameController(MoviesAPIContext context)
+    public NameController(MoviesDbContext context)
     {
         _context = context;
     }
@@ -89,5 +89,5 @@ public class NameController : ControllerBase
     private bool NameExists(string nconst)
     {
         return _context.Names.Any(e => e.Nconst == nconst);
-    }
+    }   
 }

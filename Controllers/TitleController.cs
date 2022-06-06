@@ -10,9 +10,9 @@ namespace MoviesAPI.Controllers;
 
 public class TitleController : ControllerBase
 {
-    private readonly MoviesAPIContext _context;
+    private readonly MoviesDbContext _context;
 
-    public TitleController(MoviesAPIContext context)
+    public TitleController(MoviesDbContext context)
     {
         _context = context;
     }
@@ -86,7 +86,7 @@ public class TitleController : ControllerBase
         return NoContent();
     }
 
-    public bool TitleExists(string tconst)
+    private bool TitleExists(string tconst)
     {
         return _context.Titles.Any(e => e.Tconst == tconst);
     }

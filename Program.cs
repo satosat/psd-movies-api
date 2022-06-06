@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MoviesAPI.Data;
+using MoviesAPI.Procedures;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +12,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<MoviesAPIContext>(
+builder.Services.AddDbContext<MoviesDbContext>(
     options =>
-{
-    options.UseMySql(builder.Configuration.GetConnectionString("Default"), 
-        Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.27-mysql"));
-});
+    {
+        options.UseMySql(builder.Configuration.GetConnectionString("Default"), 
+            Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.27-mysql"));
+    });
+
+builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
+    .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+builder.Services.AddDbContext<MoviesDbContextProcedures>(
+    options =>
+    {
+        options.UseMySql(builder.Configuration.GetConnectionString("Default"),
+            Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.27-mysql"));
+    });
 
 var app = builder.Build();
 

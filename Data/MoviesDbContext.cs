@@ -6,13 +6,13 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Data
 {
-    public partial class MoviesAPIContext : DbContext
+    public partial class MoviesDbContext : DbContext
     {
-        public MoviesAPIContext()
+        public MoviesDbContext()
         {
         }
 
-        public MoviesAPIContext(DbContextOptions<MoviesAPIContext> options)
+        public MoviesDbContext(DbContextOptions<MoviesDbContext> options)
             : base(options)
         {
         }
@@ -32,9 +32,6 @@ namespace MoviesAPI.Data
                     .HasName("PRIMARY");
 
                 entity.ToTable("names");
-
-                entity.HasIndex(e => e.Nconst, "nameIndex")
-                    .IsUnique();
 
                 entity.Property(e => e.Nconst)
                     .HasMaxLength(11)
@@ -86,9 +83,9 @@ namespace MoviesAPI.Data
 
                 entity.ToTable("works");
 
-                entity.HasIndex(e => e.Nconst, "nconst");
-
                 entity.HasIndex(e => e.Tconst, "tconst");
+
+                entity.HasIndex(e => new { e.Nconst, e.Tconst }, "workIndex");
 
                 entity.Property(e => e.Nconst)
                     .HasMaxLength(11)
@@ -102,13 +99,11 @@ namespace MoviesAPI.Data
                 entity.HasOne(d => d.NconstNavigation)
                     .WithMany()
                     .HasForeignKey(d => d.Nconst)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("works_ibfk_1");
 
                 entity.HasOne(d => d.TconstNavigation)
                     .WithMany()
                     .HasForeignKey(d => d.Tconst)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("works_ibfk_2");
             });
 

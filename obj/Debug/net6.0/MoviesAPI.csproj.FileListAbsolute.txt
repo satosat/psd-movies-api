@@ -237,3 +237,6 @@
 /Users/satrio/Documents/Kuliah/sem 4/PSD/MoviesAPI/bin/Debug/net6.0/runtimes/win-arm/lib/net6.0/dotnet-aspnet-codegenerator-design.exe
 /Users/satrio/Documents/Kuliah/sem 4/PSD/MoviesAPI/bin/Debug/net6.0/runtimes/win-arm64/lib/net6.0/dotnet-aspnet-codegenerator-design.exe
 /Users/satrio/Documents/Kuliah/sem 4/PSD/MoviesAPI/bin/Debug/net6.0/runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll
+/Users/satrio/Documents/Kuliah/sem 4/PSD/MoviesAPI/bin/Debug/net6.0/Microsoft.AspNetCore.JsonPatch.dll
+/Users/satrio/Documents/Kuliah/sem 4/PSD/MoviesAPI/bin/Debug/net6.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+/Users/satrio/Documents/Kuliah/sem 4/PSD/MoviesAPI/bin/Debug/net6.0/Newtonsoft.Json.Bson.dll
