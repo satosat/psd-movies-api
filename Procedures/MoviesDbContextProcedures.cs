@@ -24,5 +24,9 @@ public partial class MoviesDbContextProcedures : DbContext
             e.Property(e => e.OriginalTitle);
             e.Property(e => e.StartYear);
         });
+        
+        OnModelCreatingPartial(modelBuilder);
     }
+    
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
