@@ -59,7 +59,11 @@ public class NameController : ControllerBase
         }
         catch (DbUpdateConcurrencyException e)        
         {
-            Console.WriteLine(e);
+            if (!NameExists(nconst))
+            {
+                return NotFound();
+            }
+
             throw;
         }
 
@@ -80,5 +84,10 @@ public class NameController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    private bool NameExists(string nconst)
+    {
+        return _context.Names.Any(e => e.Nconst == nconst);
     }
 }

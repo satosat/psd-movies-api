@@ -59,7 +59,11 @@ public class TitleController : ControllerBase
         }   
         catch (DbUpdateConcurrencyException e)
         {
-            Console.WriteLine(e);
+            if (!TitleExists(tconst))
+            {
+                return NotFound();
+            }
+            
             throw;
         }
 
@@ -80,5 +84,10 @@ public class TitleController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    public bool TitleExists(string tconst)
+    {
+        return _context.Titles.Any(e => e.Tconst == tconst);
     }
 }
