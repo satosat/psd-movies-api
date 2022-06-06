@@ -42,4 +42,27 @@ public class TitleController : ControllerBase
             tconst = title.Tconst
         }, title);
     }
+
+    [HttpPut("{tconst}")]
+    public async Task<IActionResult> PutTitle(string tconst, Title title)
+    {
+        if (tconst != title.Tconst)
+        {
+            return BadRequest();
+        }
+
+        _context.Entry(title).State = EntityState.Modified;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }   
+        catch (DbUpdateConcurrencyException e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return NoContent();
+    }
 }

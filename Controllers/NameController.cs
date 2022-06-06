@@ -42,4 +42,27 @@ public class NameController : ControllerBase
             nconst = name.Nconst
         }, name);
     }
+
+    [HttpPut("{nconst}")]
+    public async Task<IActionResult> PutName(string nconst, Name name)
+    {
+        if (nconst != name.Nconst)
+        {
+            return BadRequest();
+        }
+
+        _context.Entry(name).State = EntityState.Modified;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException e)        
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return NoContent();
+    }
 }
