@@ -65,4 +65,20 @@ public class NameController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpDelete("{nconst}")]
+    public async Task<IActionResult> DeleteProduct(string nconst)
+    {
+        var name = await _context.Names.FindAsync(nconst);
+
+        if (name == null)
+        {
+            return NotFound();
+        }
+
+        _context.Names.Remove(name);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }

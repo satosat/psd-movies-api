@@ -65,4 +65,20 @@ public class TitleController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpDelete("{tconst}")]
+    public async Task<IActionResult> DeleteTitle(string tconst)
+    {
+        var title = await _context.Titles.FindAsync(tconst);
+
+        if (title == null)
+        {
+            return NotFound();
+        }
+
+        _context.Titles.Remove(title);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
