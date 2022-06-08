@@ -5,6 +5,7 @@ namespace MoviesAPI.Procedures;
 public partial class MoviesDbContextProcedures : DbContext
 {
     public virtual DbSet<Work> Works { get; set; } = null!;
+    public virtual DbSet<Cast> Casts { get; set; } = null!;
 
     public MoviesDbContextProcedures()
     {
@@ -23,6 +24,13 @@ public partial class MoviesDbContextProcedures : DbContext
             e.Property(e => e.PrimaryTitle);
             e.Property(e => e.OriginalTitle);
             e.Property(e => e.StartYear);
+        });
+
+        modelBuilder.Entity<Cast>(e =>
+        {
+            e.HasNoKey();
+            e.Property(e => e.Nconst);
+            e.Property(e => e.PrimaryName);
         });
         
         OnModelCreatingPartial(modelBuilder);
