@@ -57,7 +57,7 @@ public class TitleController : ControllerBase
         {
             await _context.SaveChangesAsync();
         }   
-        catch (DbUpdateConcurrencyException e)
+        catch (DbUpdateConcurrencyException)
         {
             if (!TitleExists(tconst))
             {

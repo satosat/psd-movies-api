@@ -57,7 +57,7 @@ public class NameController : ControllerBase
         {
             await _context.SaveChangesAsync();
         }
-        catch (DbUpdateConcurrencyException e)        
+        catch (DbUpdateConcurrencyException)        
         {
             if (!NameExists(nconst))
             {
