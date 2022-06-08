@@ -17,20 +17,22 @@ public partial class MoviesDbContextProcedures : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Work>(e =>
+        // Work result table structure
+        modelBuilder.Entity<Work>(entity =>
         {
-            e.HasNoKey();
-            e.Property(e => e.Tconst);
-            e.Property(e => e.PrimaryTitle);
-            e.Property(e => e.OriginalTitle);
-            e.Property(e => e.StartYear);
+            entity.HasNoKey();
+            entity.Property(e => e.Tconst);
+            entity.Property(e => e.PrimaryTitle);
+            entity.Property(e => e.OriginalTitle);
+            entity.Property(e => e.StartYear);
         });
 
-        modelBuilder.Entity<Cast>(e =>
+        // Cast result table structure
+        modelBuilder.Entity<Cast>(entity =>
         {
-            e.HasNoKey();
-            e.Property(e => e.Nconst);
-            e.Property(e => e.PrimaryName);
+            entity.HasNoKey();
+            entity.Property(e => e.Nconst);
+            entity.Property(e => e.PrimaryName);
         });
         
         OnModelCreatingPartial(modelBuilder);
