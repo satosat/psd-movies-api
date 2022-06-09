@@ -24,7 +24,7 @@ public class TitleController : ControllerBase
     }
 
     [HttpGet("{tconst}")]
-    public async Task<ActionResult<Title>> ShowTitle(string tconst)
+    public async Task<ActionResult<Title>> ShowTitle(string tconst, bool ratings)
     {
         var title = await _context.Titles.FindAsync(tconst);
 
