@@ -8,7 +8,7 @@
     at <a>https://datasets.imdbws.com/</a>
 </p>
 
-###Project requirements:
+### Project requirements:
 1. Dotnet SDK (6.0)
 2. MySQL (8.0.2x)
 
