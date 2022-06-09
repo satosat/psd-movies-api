@@ -10,9 +10,9 @@ namespace MoviesAPI.Controllers;
 
 public class RatingController : ControllerBase
 {
-    private readonly MoviesDbContext _context;
+    private readonly Context _context;
 
-    public RatingController(MoviesDbContext context)
+    public RatingController(Context context)
     {
         _context = context;
     }

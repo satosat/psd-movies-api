@@ -10,9 +10,9 @@ namespace MoviesAPI.Controllers;
 
 public class TitleController : ControllerBase
 {
-    private readonly MoviesDbContext _context;
+    private readonly Context _context;
 
-    public TitleController(MoviesDbContext context)
+    public TitleController(Context context)
     {
         _context = context;
     }

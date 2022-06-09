@@ -1,4 +1,4 @@
-namespace MoviesAPI.Procedures;
+namespace MoviesAPI.Models;
 
 public class Cast
 {

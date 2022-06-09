@@ -6,21 +6,23 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Data;
 
-public partial class MoviesDbContext : DbContext
+public partial class Context : Microsoft.EntityFrameworkCore.DbContext
 {
-    public MoviesDbContext()
+    public Context()
     {
     }
 
-    public MoviesDbContext(DbContextOptions<MoviesDbContext> options)
+    public Context(DbContextOptions<Context> options)
         : base(options)
     {
     }
 
     public virtual DbSet<Name> Names { get; set; } = null!;
     public virtual DbSet<Title> Titles { get; set; } = null!;
-    public virtual DbSet<Work> Works { get; set; } = null!;
     public virtual DbSet<Rating> Ratings { get; set; } = null!;
+    public virtual DbSet<Title> Works { get; set; } = null!;
+    public virtual DbSet<Cast> Casts { get; set; } = null!;
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -77,37 +79,7 @@ public partial class MoviesDbContext : DbContext
                 .HasColumnName("startYear")
                 .IsFixedLength();
         });
-
-        modelBuilder.Entity<Work>(entity =>
-        {
-            entity.HasNoKey();
-
-            entity.ToTable("works");
-
-            entity.HasIndex(e => e.Tconst, "tconst");
-
-            entity.HasIndex(e => new { e.Nconst, e.Tconst }, "workIndex");
-
-            entity.Property(e => e.Nconst)
-                .HasMaxLength(11)
-                .HasColumnName("nconst")
-                .IsFixedLength();
-
-            entity.Property(e => e.Tconst)
-                .HasMaxLength(11)
-                .HasColumnName("tconst");
-
-            entity.HasOne(d => d.NconstNavigation)
-                .WithMany()
-                .HasForeignKey(d => d.Nconst)
-                .HasConstraintName("works_ibfk_1");
-
-            entity.HasOne(d => d.TconstNavigation)
-                .WithMany()
-                .HasForeignKey(d => d.Tconst)
-                .HasConstraintName("works_ibfk_2");
-        });
-
+        
         modelBuilder.Entity<Rating>(entity =>
         {
             entity.HasNoKey();
@@ -121,9 +93,18 @@ public partial class MoviesDbContext : DbContext
                 .HasColumnName("tconst")
                 .IsRequired();
 
-            entity.Property(e => e.averageRating)
+            entity.Property(e => e.AverageRating)
                 .HasPrecision(2)
                 .IsRequired();
+        });
+        
+        // Procedure Model
+        // GetCastsByTconst
+        modelBuilder.Entity<Cast>(entity =>
+        {
+            entity.HasNoKey();
+            entity.Property(e => e.Nconst);
+            entity.Property(e => e.PrimaryName);
         });
 
         OnModelCreatingPartial(modelBuilder);

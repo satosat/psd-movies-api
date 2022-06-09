@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MoviesAPI.Procedures;
+using MoviesAPI.Models;
+using MoviesAPI.Data;
 
 namespace MoviesAPI.Controllers;
 
@@ -9,17 +10,17 @@ namespace MoviesAPI.Controllers;
 
 public class WorkController : ControllerBase
 {
-    private readonly MoviesDbContextProcedures _contextProcedures;
+    private readonly Context _context;
 
-    public WorkController(MoviesDbContextProcedures contextProcedures)
+    public WorkController(Context context)
     {
-        _contextProcedures = contextProcedures;
+        _context = context;
     }
 
     [HttpGet("Movies/{nconst}")]
-    public async Task<ActionResult<IEnumerable<Work>>> GetWorks(string nconst)
+    public async Task<ActionResult<IEnumerable<Title>>> GetWorks(string nconst)
     {
-        return await _contextProcedures.Works
+        return await _context.Works
             .FromSqlRaw("CALL GetWorksByNconst({0})", nconst)
             .ToListAsync();
     }
@@ -27,7 +28,7 @@ public class WorkController : ControllerBase
     [HttpGet("Casts/{tconst}")]
     public async Task<ActionResult<IEnumerable<Cast>>> GetCasts(string tconst)
     {
-        return await _contextProcedures.Casts
+        return await _context.Casts
             .FromSqlRaw("CALL GetCastsByTconst({0})", tconst)
             .ToListAsync();
     }
