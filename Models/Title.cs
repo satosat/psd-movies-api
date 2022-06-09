@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MoviesAPI.Models
+﻿namespace MoviesAPI.Models
 {
     public partial class Title
     {
