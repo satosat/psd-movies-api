@@ -18,13 +18,13 @@ public class RatingController : ControllerBase
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<IEnumerable<Rating>>> GetRatings()
+    public async Task<ActionResult<IEnumerable<Rating>>> Index()
     {
         return await _context.Ratings.ToListAsync();
     }
 
     [HttpGet("{tconst}")]
-    public async Task<ActionResult<Rating>> ShowRating(string tconst)
+    public async Task<ActionResult<Rating>> Show(string tconst)
     {
         var rating = await _context.Ratings
             .Where(r => r.Tconst == tconst)
@@ -34,19 +34,19 @@ public class RatingController : ControllerBase
     }
 
     [HttpPost("")]
-    public async Task<ActionResult<Rating>> StoreRating(Rating rating)
+    public async Task<ActionResult<Rating>> Store(Rating rating)
     {
         _context.Ratings.Add(rating);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetRatings", new
+        return CreatedAtAction("Index", new
         {
             tconst = rating.Tconst
         }, rating);
     }
 
     [HttpPut("{tconst}")]
-    public async Task<IActionResult> PutRating(string tconst, Rating rating)
+    public async Task<IActionResult> Update(string tconst, Rating rating)
     {
         if (tconst != rating.Tconst)
         {
@@ -72,7 +72,7 @@ public class RatingController : ControllerBase
     }
 
     [HttpDelete("{tconst}")]
-    public async Task<IActionResult> DeleteRating(string tconst)
+    public async Task<IActionResult> Destroy(string tconst)
     {
         var rating = await _context.Ratings
             .Where(r => r.Tconst == tconst)

@@ -18,13 +18,13 @@ public class TitleController : ControllerBase
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<IEnumerable<Title>>> GetTitles()
+    public async Task<ActionResult<IEnumerable<Title>>> Index()
     {
         return await _context.Titles.ToListAsync();
     }
 
     [HttpGet("{tconst}")]
-    public async Task<ActionResult<Title>> ShowTitle(string tconst, bool ratings)
+    public async Task<ActionResult<Title>> Show(string tconst, bool ratings)
     {
         var title = await _context.Titles.FindAsync(tconst);
 
@@ -32,19 +32,19 @@ public class TitleController : ControllerBase
     }
 
     [HttpPost("")]
-    public async Task<ActionResult<Title>> StoreTitle(Title title)
+    public async Task<ActionResult<Title>> Store(Title title)
     {
         _context.Titles.Add(title);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetTitles", new
+        return CreatedAtAction("Index", new
         {
             tconst = title.Tconst
         }, title);
     }
 
     [HttpPut("{tconst}")]
-    public async Task<IActionResult> PutTitle(string tconst, Title title)
+    public async Task<IActionResult> Update(string tconst, Title title)
     {
         if (tconst != title.Tconst)
         {
@@ -71,7 +71,7 @@ public class TitleController : ControllerBase
     }
 
     [HttpDelete("{tconst}")]
-    public async Task<IActionResult> DeleteTitle(string tconst)
+    public async Task<IActionResult> Destroy(string tconst)
     {
         var title = await _context.Titles.FindAsync(tconst);
 

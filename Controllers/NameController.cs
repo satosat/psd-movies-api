@@ -18,13 +18,13 @@ public class NameController : ControllerBase
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<IEnumerable<Name>>> GetNames()
+    public async Task<ActionResult<IEnumerable<Name>>> Index()
     {
         return await _context.Names.ToListAsync();
     }
 
     [HttpGet("{nconst}")]
-    public async Task<ActionResult<Name>> ShowName(string nconst)
+    public async Task<ActionResult<Name>> Show(string nconst)
     {
         var name = await _context.Names.FindAsync(nconst);
 
@@ -32,19 +32,19 @@ public class NameController : ControllerBase
     }
 
     [HttpPost("")]
-    public async Task<ActionResult<Name>> StoreName(Name name)
+    public async Task<ActionResult<Name>> Store(Name name)
     {
         _context.Names.Add(name);
         await _context.SaveChangesAsync();
         
-        return CreatedAtAction("GetNames", new
+        return CreatedAtAction("Index", new
         {
             nconst = name.Nconst
         }, name);
     }
 
     [HttpPut("{nconst}")]
-    public async Task<IActionResult> PutName(string nconst, Name name)
+    public async Task<IActionResult> Update(string nconst, Name name)
     {
         if (nconst != name.Nconst)
         {
@@ -71,7 +71,7 @@ public class NameController : ControllerBase
     }
 
     [HttpDelete("{nconst}")]
-    public async Task<IActionResult> DeleteProduct(string nconst)
+    public async Task<IActionResult> Destroy(string nconst)
     {
         var name = await _context.Names.FindAsync(nconst);
 
