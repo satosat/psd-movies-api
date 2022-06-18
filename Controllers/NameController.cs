@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MoviesAPI.Data;
 using MoviesAPI.Models;
+using MoviesAPI.Repositories;
 
 namespace MoviesAPI.Controllers;
 
@@ -10,84 +10,40 @@ namespace MoviesAPI.Controllers;
 
 public class NameController : ControllerBase
 {
-    private readonly Context _context;
+    private readonly NameRepository _repository;
 
     public NameController(Context context)
     {
-        _context = context;
+        _repository = new NameRepository(context);
     }
 
     [HttpGet("")]
     public async Task<ActionResult<IEnumerable<Name>>> Index()
     {
-        return await _context.Names.ToListAsync();
+        return await _repository.GetAll();
     }
 
     [HttpGet("{nconst}")]
     public async Task<ActionResult<Name>> Show(string nconst)
     {
-        var name = await _context.Names.FindAsync(nconst);
-
-        return name == null ? NotFound() : name;
+        return await _repository.Find(nconst);
     }
 
     [HttpPost("")]
     public async Task<ActionResult<Name>> Store(Name name)
     {
-        _context.Names.Add(name);
-        await _context.SaveChangesAsync();
-        
-        return CreatedAtAction("Index", new
-        {
-            nconst = name.Nconst
-        }, name);
+        return await _repository.Store(name);
     }
 
     [HttpPut("{nconst}")]
     public async Task<IActionResult> Update(string nconst, Name name)
     {
-        if (nconst != name.Nconst)
-        {
-            return BadRequest();
-        }
-
-        _context.Entry(name).State = EntityState.Modified;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)        
-        {
-            if (!NameExists(nconst))
-            {
-                return NotFound();
-            }
-
-            throw;
-        }
-
-        return NoContent();
+        return await _repository.Update(nconst, name);
     }
 
     [HttpDelete("{nconst}")]
     public async Task<IActionResult> Destroy(string nconst)
     {
-        var name = await _context.Names.FindAsync(nconst);
-
-        if (name == null)
-        {
-            return NotFound();
-        }
-
-        _context.Names.Remove(name);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
+        return await _repository.Destroy(nconst);
     }
-
-    private bool NameExists(string nconst)
-    {
-        return _context.Names.Any(e => e.Nconst == nconst);
-    }   
 }

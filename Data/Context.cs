@@ -3,7 +3,7 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Data;
 
-public partial class Context : Microsoft.EntityFrameworkCore.DbContext
+public partial class Context : DbContext
 {
     public Context()
     {

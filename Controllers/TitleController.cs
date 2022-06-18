@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MoviesAPI.Data;
 using MoviesAPI.Models;
+using MoviesAPI.Repositories;
 
 namespace MoviesAPI.Controllers;
 
@@ -10,84 +10,40 @@ namespace MoviesAPI.Controllers;
 
 public class TitleController : ControllerBase
 {
-    private readonly Context _context;
+    private readonly TitleRepository _repository;
 
     public TitleController(Context context)
     {
-        _context = context;
+        _repository = new TitleRepository(context);
     }
 
     [HttpGet("")]
     public async Task<ActionResult<IEnumerable<Title>>> Index()
     {
-        return await _context.Titles.ToListAsync();
+        return await _repository.GetAll();
     }
 
     [HttpGet("{tconst}")]
-    public async Task<ActionResult<Title>> Show(string tconst, bool ratings)
+    public async Task<ActionResult<Title>> Show(string tconst)
     {
-        var title = await _context.Titles.FindAsync(tconst);
-
-        return title == null ? NotFound() : title;
+        return await _repository.Find(tconst);
     }
 
     [HttpPost("")]
     public async Task<ActionResult<Title>> Store(Title title)
     {
-        _context.Titles.Add(title);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("Index", new
-        {
-            tconst = title.Tconst
-        }, title);
+        return await _repository.Store(title);
     }
 
     [HttpPut("{tconst}")]
     public async Task<IActionResult> Update(string tconst, Title title)
     {
-        if (tconst != title.Tconst)
-        {
-            return BadRequest();
-        }
-
-        _context.Entry(title).State = EntityState.Modified;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }   
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!TitleExists(tconst))
-            {
-                return NotFound();
-            }
-            
-            throw;
-        }
-
-        return NoContent();
+        return await _repository.Update(tconst, title);
     }
 
     [HttpDelete("{tconst}")]
     public async Task<IActionResult> Destroy(string tconst)
     {
-        var title = await _context.Titles.FindAsync(tconst);
-
-        if (title == null)
-        {
-            return NotFound();
-        }
-
-        _context.Titles.Remove(title);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    private bool TitleExists(string tconst)
-    {
-        return _context.Titles.Any(e => e.Tconst == tconst);
+        return await _repository.Destroy(tconst);
     }
 }

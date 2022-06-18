@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `moviesdb` 
+CREATE DATABASE  IF NOT EXISTS `moviesdb`; 
 USE `moviesdb`;
 
 DROP TABLE IF EXISTS `names`;

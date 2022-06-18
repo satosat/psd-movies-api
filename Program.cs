@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using MoviesAPI.Controllers;
 using MoviesAPI.Data;
+using MoviesAPI.Repositories;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
