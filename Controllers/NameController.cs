@@ -8,7 +8,7 @@ namespace MoviesAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 
-public class NameController : ControllerBase
+public class NameController : ControllerBase, IModelController<Name>
 {
     private readonly NameRepository _repository;
 

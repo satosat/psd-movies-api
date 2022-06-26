@@ -9,7 +9,7 @@ namespace MoviesAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 
-public class RatingController : ControllerBase
+public class RatingController : ControllerBase, IModelController<Rating>
 {
     private readonly RatingRepository _ratingRepository;
 

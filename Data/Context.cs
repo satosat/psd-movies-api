@@ -19,8 +19,8 @@ public partial class Context : DbContext
     public virtual DbSet<Rating> Ratings { get; set; } = null!;
     public virtual DbSet<Title> Works { get; set; } = null!;
     public virtual DbSet<Cast> Casts { get; set; } = null!;
-
-
+    
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("utf8mb4_0900_ai_ci")
