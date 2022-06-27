@@ -5,7 +5,7 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Repositories;
 
-public class TitleRepository : Repository, IModelRepository<Title>
+public class TitleRepository : ResourceRepository, IResourceRepository<Title>
 {
     public TitleRepository(Context context) : base(context)
     {
@@ -13,11 +13,21 @@ public class TitleRepository : Repository, IModelRepository<Title>
 
     public async Task<ActionResult<IEnumerable<Title>>> GetAll(string apiKey)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         return await GetContext().Titles.ToListAsync();
     }
 
-    public async Task<ActionResult<Title>> Find(string tconst)
+    public async Task<ActionResult<Title>> Find(string apiKey, string tconst)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         var title = await GetContext().Titles.FindAsync(tconst);
 
         if (title == null)
@@ -28,8 +38,13 @@ public class TitleRepository : Repository, IModelRepository<Title>
         return title;
     }
 
-    public async Task<ActionResult<Title>> Store(Title title)
+    public async Task<ActionResult<Title>> Store(string apiKey, Title title)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         GetContext().Titles.Add(title);
         await GetContext().SaveChangesAsync();
 
@@ -40,8 +55,13 @@ public class TitleRepository : Repository, IModelRepository<Title>
             }, title);
     }
 
-    public async Task<ActionResult> Update(string tconst, Title title)
+    public async Task<ActionResult> Update(string apiKey, string tconst, Title title)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         if (tconst != title.Tconst)
         {
             return new BadRequestResult();
@@ -64,8 +84,13 @@ public class TitleRepository : Repository, IModelRepository<Title>
         return new NoContentResult();
     }
 
-    public async Task<IActionResult> Destroy(string tconst)
+    public async Task<IActionResult> Destroy(string apiKey, string tconst)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         var title = await GetContext().Titles.FindAsync(tconst);
 
         if (title == null)

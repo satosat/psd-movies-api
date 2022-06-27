@@ -28,27 +28,27 @@ public class TitleController : ControllerBase, IModelController<Title>
     public async Task<ActionResult<Title>> Show(string apiKey, string tconst)
     {
         if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
-        return await _repository.Find(tconst);
+        return await _repository.Find(apiKey, tconst);
     }
 
     [HttpPost("")]
     public async Task<ActionResult<Title>> Store(string apiKey, Title title)
     {
         if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
-        return await _repository.Store(title);
+        return await _repository.Store(apiKey, title);
     }
 
     [HttpPut("{tconst}")]
     public async Task<IActionResult> Update(string apiKey, string tconst, Title title)
     {
         if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
-        return await _repository.Update(tconst, title);
+        return await _repository.Update(apiKey, tconst, title);
     }
 
     [HttpDelete("{tconst}")]
     public async Task<IActionResult> Destroy(string apiKey, string tconst)
     {
         if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
-        return await _repository.Destroy(tconst);
+        return await _repository.Destroy(apiKey, tconst);
     }
 }

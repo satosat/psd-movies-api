@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.JsonPatch.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesAPI.Data;
@@ -6,7 +5,7 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Repositories;
 
-public class RatingRepository : Repository, IModelRepository<Rating>
+public class RatingRepository : ResourceRepository, IResourceRepository<Rating>
 {
     public RatingRepository(Context context) : base(context)
     {
@@ -14,11 +13,21 @@ public class RatingRepository : Repository, IModelRepository<Rating>
 
     public async Task<ActionResult<IEnumerable<Rating>>> GetAll(string apiKey)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         return await GetContext().Ratings.ToListAsync();
     }
 
-    public async Task<ActionResult<Rating>> Find(string tconst)
+    public async Task<ActionResult<Rating>> Find(string apiKey, string tconst)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         var rating = await GetContext().Ratings.FindAsync(tconst);
 
         if (rating == null)
@@ -29,8 +38,13 @@ public class RatingRepository : Repository, IModelRepository<Rating>
         return rating;
     }
 
-    public async Task<ActionResult<Rating>> Store(Rating rating)
+    public async Task<ActionResult<Rating>> Store(string apiKey, Rating rating)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         if (!GetContext().Titles.Any(e => e.Tconst == rating.Tconst))
         {
             return new BadRequestResult();
@@ -46,8 +60,13 @@ public class RatingRepository : Repository, IModelRepository<Rating>
             }, rating);
     }
 
-    public async Task<ActionResult> Update(string tconst, Rating rating)
+    public async Task<ActionResult> Update(string apiKey, string tconst, Rating rating)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         if (tconst != rating.Tconst)
         {
             return new BadRequestResult();
@@ -71,8 +90,13 @@ public class RatingRepository : Repository, IModelRepository<Rating>
         return new NoContentResult();
     }
 
-    public async Task<IActionResult> Destroy(string tconst)
+    public async Task<IActionResult> Destroy(string apiKey, string tconst)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         var rating = await GetContext().Ratings.FindAsync(tconst);
 
         if (rating == null)

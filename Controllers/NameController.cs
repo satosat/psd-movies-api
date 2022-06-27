@@ -5,7 +5,7 @@ using MoviesAPI.Repositories;
 
 namespace MoviesAPI.Controllers;
 
-[Route("api/v1/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 
 public class NameController : ControllerBase, IModelController<Name>
@@ -28,27 +28,27 @@ public class NameController : ControllerBase, IModelController<Name>
     public async Task<ActionResult<Name>> Show(string apiKey, string nconst)
     {
         if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
-        return await _repository.Find(nconst);
+        return await _repository.Find(apiKey, nconst);
     }
 
     [HttpPost("")]
     public async Task<ActionResult<Name>> Store(string apiKey, Name name)
     {
         if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
-        return await _repository.Store(name);
+        return await _repository.Store(apiKey, name);
     }
 
     [HttpPut("{nconst}")]
     public async Task<IActionResult> Update(string apiKey, string nconst, Name name)
     {
         if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
-        return await _repository.Update(nconst, name);
+        return await _repository.Update(apiKey, nconst, name);
     }
 
     [HttpDelete("{nconst}")]
     public async Task<IActionResult> Destroy(string apiKey, string nconst)
     {
         if (nconst == null) throw new ArgumentNullException(nameof(nconst));
-        return await _repository.Destroy(nconst);
+        return await _repository.Destroy(apiKey, nconst);
     }
 }

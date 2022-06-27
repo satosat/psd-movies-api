@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MoviesAPI.Models;
 using MoviesAPI.Data;
 using MoviesAPI.Repositories;
@@ -19,14 +18,16 @@ public class WorkController : ControllerBase
     }
 
     [HttpGet("Movies/{nconst}")]
-    public async Task<ActionResult<IEnumerable<Title>>> GetWorks(string nconst)
+    public async Task<ActionResult<IEnumerable<Title>>> GetWorks(string nconst, string apiKey)
     {
-        return await _workRepository.GetWorks(nconst);
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
+        return await _workRepository.GetWorks(apiKey, nconst);
     }
 
     [HttpGet("Casts/{tconst}")]
-    public async Task<ActionResult<IEnumerable<Cast>>> GetCasts(string tconst)
+    public async Task<ActionResult<IEnumerable<Cast>>> GetCasts(string tconst, string apiKey)
     {
-        return await _workRepository.GetCasts(tconst);
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
+        return await _workRepository.GetCasts(apiKey, tconst);
     }
 }

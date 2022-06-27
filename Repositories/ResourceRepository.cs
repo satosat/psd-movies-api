@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using MoviesAPI.Data;
 using MoviesAPI.Models;
 
@@ -5,20 +6,21 @@ namespace MoviesAPI.Repositories;
 
 public class ResourceRepository : Repository
 {
-    private readonly AccountRepository _accountRepository;
     private static readonly Dictionary<string, int> Plans = new()
     {
         {"Free", 500},
         {"Silver", 5000},
         {"Gold", 500000}
     };
-    
-    public ResourceRepository(Context context) : base(context)
+
+    protected ResourceRepository(Context context) : base(context)
     {
-        _accountRepository = new AccountRepository(context);
     }
 
-    protected bool IsAuthorized(string apiKey)
+    /** Dummy implementation of an authorization middleware
+     * 
+     */
+    protected async Task<bool> IsAuthorized(string apiKey)
     {
         if (!GetContext().Accounts.Any(e => e.ApiKey == apiKey))
         {
@@ -27,6 +29,20 @@ public class ResourceRepository : Repository
         
         var account = (Account) GetContext().Accounts.FindAsync(apiKey).Result!;
 
-        return account.MonthlyCallsMade <= Plans[account.Plan];
+        if(account.MonthlyCallsMade >= Plans[account.Plan])
+        {
+            return false;
+        }
+        
+        await IncrementCalls(account);
+        return true;
+    }
+
+    private async Task<ActionResult> IncrementCalls(Account account)
+    {
+        account.MonthlyCallsMade += 1;
+        await GetContext().SaveChangesAsync();
+
+        return new NoContentResult();
     }
 }

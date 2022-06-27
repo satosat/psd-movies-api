@@ -5,7 +5,7 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Repositories;
 
-public class NameRepository : ResourceRepository, IModelRepository<Name>
+public class NameRepository : ResourceRepository, IResourceRepository<Name>
 {
     public NameRepository(Context context) : base(context)
     {
@@ -13,23 +13,33 @@ public class NameRepository : ResourceRepository, IModelRepository<Name>
     
     public async Task<ActionResult<IEnumerable<Name>>> GetAll(string apiKey)
     {
-        if (!IsAuthorized(apiKey))
+        if (!IsAuthorized(apiKey).Result)
         {
             return new BadRequestResult();
         }
         return await GetContext().Names.ToListAsync();
     }
 
-    public async Task<ActionResult<Name>> Find(string nconst)
+    public async Task<ActionResult<Name>> Find(string apiKey, string nconst)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         var name = await GetContext().Names
             .FindAsync(nconst);
 
         return name == null ? new NotFoundResult() : name;
     }
 
-    public async Task<ActionResult<Name>> Store(Name name)
+    public async Task<ActionResult<Name>> Store(string apiKey, Name name)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         GetContext().Names.Add(name);
         await GetContext().SaveChangesAsync();
 
@@ -40,8 +50,13 @@ public class NameRepository : ResourceRepository, IModelRepository<Name>
             }, name);
     }
 
-    public async Task<ActionResult> Update(string nconst, Name name)
+    public async Task<ActionResult> Update(string apiKey, string nconst, Name name)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         if (nconst != name.Nconst)
         {
             return new BadRequestResult();
@@ -66,8 +81,13 @@ public class NameRepository : ResourceRepository, IModelRepository<Name>
         return new NoContentResult();
     }
 
-    public async Task<IActionResult> Destroy(string nconst)
+    public async Task<IActionResult> Destroy(string apiKey, string nconst)
     {
+        if (!IsAuthorized(apiKey).Result)
+        {
+            return new BadRequestResult();
+        }
+        
         var name = await GetContext().Names.FindAsync(nconst);
 
         if (name == null)
