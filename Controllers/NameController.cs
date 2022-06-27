@@ -30,25 +30,4 @@ public class NameController : ControllerBase, IModelController<Name>
         if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _repository.Find(apiKey, nconst);
     }
-
-    [HttpPost("")]
-    public async Task<ActionResult<Name>> Store(string apiKey, Name name)
-    {
-        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
-        return await _repository.Store(apiKey, name);
-    }
-
-    [HttpPut("{nconst}")]
-    public async Task<IActionResult> Update(string apiKey, string nconst, Name name)
-    {
-        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
-        return await _repository.Update(apiKey, nconst, name);
-    }
-
-    [HttpDelete("{nconst}")]
-    public async Task<IActionResult> Destroy(string apiKey, string nconst)
-    {
-        if (nconst == null) throw new ArgumentNullException(nameof(nconst));
-        return await _repository.Destroy(apiKey, nconst);
-    }
 }

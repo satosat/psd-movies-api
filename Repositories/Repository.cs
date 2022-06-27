@@ -2,7 +2,7 @@ using MoviesAPI.Data;
 
 namespace MoviesAPI.Repositories;
 
-public abstract class Repository
+public class Repository
 {
     private readonly Context _context;
 
