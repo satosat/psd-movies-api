@@ -19,8 +19,9 @@ public partial class Context : DbContext
     public virtual DbSet<Rating> Ratings { get; set; } = null!;
     public virtual DbSet<Title> Works { get; set; } = null!;
     public virtual DbSet<Cast> Casts { get; set; } = null!;
-    
-    
+    public virtual DbSet<Account> Accounts { get; set; } = null!;
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("utf8mb4_0900_ai_ci")
@@ -92,6 +93,28 @@ public partial class Context : DbContext
 
             entity.Property(e => e.AverageRating)
                 .HasPrecision(2)
+                .IsRequired();
+        });
+
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.HasKey(e => e.ApiKey)
+                .HasName("PRIMARY");
+
+            entity.ToTable("accounts");
+
+            entity.Property(e => e.ApiKey)
+                .HasMaxLength(32)
+                .HasColumnName("apiKey")
+                .IsFixedLength();
+
+            entity.Property(e => e.Plan)
+                .HasMaxLength(40)
+                .HasColumnName("plan")
+                .IsRequired();
+
+            entity.Property(e => e.MonthlyCallsMade)
+                .HasColumnName("monthlyCallsMade")
                 .IsRequired();
         });
         
