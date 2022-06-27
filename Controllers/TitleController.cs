@@ -18,32 +18,37 @@ public class TitleController : ControllerBase, IModelController<Title>
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<IEnumerable<Title>>> Index()
+    public async Task<ActionResult<IEnumerable<Title>>> Index(string apiKey)
     {
-        return await _repository.GetAll();
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
+        return await _repository.GetAll(apiKey);
     }
 
     [HttpGet("{tconst}")]
-    public async Task<ActionResult<Title>> Show(string tconst)
+    public async Task<ActionResult<Title>> Show(string apiKey, string tconst)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _repository.Find(tconst);
     }
 
     [HttpPost("")]
-    public async Task<ActionResult<Title>> Store(Title title)
+    public async Task<ActionResult<Title>> Store(string apiKey, Title title)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _repository.Store(title);
     }
 
     [HttpPut("{tconst}")]
-    public async Task<IActionResult> Update(string tconst, Title title)
+    public async Task<IActionResult> Update(string apiKey, string tconst, Title title)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _repository.Update(tconst, title);
     }
 
     [HttpDelete("{tconst}")]
-    public async Task<IActionResult> Destroy(string tconst)
+    public async Task<IActionResult> Destroy(string apiKey, string tconst)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _repository.Destroy(tconst);
     }
 }

@@ -6,10 +6,18 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Repositories;
 
-public class AccountRepository : ModelRepository
+public class AccountRepository : Repository
 {
     public AccountRepository(Context context) : base(context)
     {
+    }
+
+    public async Task<ActionResult<Account>> Find(string apiKey)
+    {
+        var account = await GetContext().Accounts
+            .FindAsync(apiKey);
+
+        return account == null ? new NotFoundResult() : account;
     }
 
     public string Store()
@@ -72,7 +80,7 @@ public class AccountRepository : ModelRepository
 
         return new NoContentResult();
     }
-
+    
     private bool AccountExists(string apiKey)
     {
         return GetContext().Accounts.Any(e => e.ApiKey == apiKey);

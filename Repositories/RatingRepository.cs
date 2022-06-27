@@ -6,13 +6,13 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Repositories;
 
-public class RatingRepository : ModelRepository, IModelRepository<Rating>
+public class RatingRepository : Repository, IModelRepository<Rating>
 {
     public RatingRepository(Context context) : base(context)
     {
     }
 
-    public async Task<ActionResult<IEnumerable<Rating>>> GetAll()
+    public async Task<ActionResult<IEnumerable<Rating>>> GetAll(string apiKey)
     {
         return await GetContext().Ratings.ToListAsync();
     }

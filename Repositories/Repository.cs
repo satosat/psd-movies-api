@@ -2,11 +2,11 @@ using MoviesAPI.Data;
 
 namespace MoviesAPI.Repositories;
 
-public abstract class ModelRepository
+public abstract class Repository
 {
-    private readonly Context _context; 
+    private readonly Context _context;
 
-    protected ModelRepository(Context context)
+    protected Repository(Context context)
     {
         _context = context;
     }

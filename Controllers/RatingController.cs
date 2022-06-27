@@ -19,32 +19,37 @@ public class RatingController : ControllerBase, IModelController<Rating>
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<IEnumerable<Rating>>> Index()
+    public async Task<ActionResult<IEnumerable<Rating>>> Index(string apiKey)
     {
-        return await _ratingRepository.GetAll();
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
+        return await _ratingRepository.GetAll(apiKey);
     }
 
     [HttpGet("{tconst}")]
-    public async Task<ActionResult<Rating>> Show(string tconst)
+    public async Task<ActionResult<Rating>> Show(string apiKey, string tconst)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _ratingRepository.Find(tconst);
     }
 
     [HttpPost("")]
-    public async Task<ActionResult<Rating>> Store(Rating rating)
+    public async Task<ActionResult<Rating>> Store(string apiKey, Rating rating)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _ratingRepository.Store(rating);
     }
 
     [HttpPut("{tconst}")]
-    public async Task<IActionResult> Update(string tconst, Rating rating)
+    public async Task<IActionResult> Update(string apiKey, string tconst, Rating rating)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _ratingRepository.Update(tconst, rating);
     }
 
     [HttpDelete("{tconst}")]
-    public async Task<IActionResult> Destroy(string tconst)
+    public async Task<IActionResult> Destroy(string apiKey, string tconst)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _ratingRepository.Destroy(tconst);
     }
 }

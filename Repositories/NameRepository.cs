@@ -5,14 +5,18 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Repositories;
 
-public class NameRepository : ModelRepository, IModelRepository<Name>
+public class NameRepository : ResourceRepository, IModelRepository<Name>
 {
     public NameRepository(Context context) : base(context)
     {
     }
     
-    public async Task<ActionResult<IEnumerable<Name>>> GetAll()
+    public async Task<ActionResult<IEnumerable<Name>>> GetAll(string apiKey)
     {
+        if (!IsAuthorized(apiKey))
+        {
+            return new BadRequestResult();
+        }
         return await GetContext().Names.ToListAsync();
     }
 

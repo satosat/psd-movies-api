@@ -5,7 +5,7 @@ using MoviesAPI.Repositories;
 
 namespace MoviesAPI.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 [ApiController]
 
 public class NameController : ControllerBase, IModelController<Name>
@@ -18,32 +18,37 @@ public class NameController : ControllerBase, IModelController<Name>
     }
 
     [HttpGet("")]
-    public async Task<ActionResult<IEnumerable<Name>>> Index()
+    public async Task<ActionResult<IEnumerable<Name>>> Index(string apiKey)
     {
-        return await _repository.GetAll();
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
+        return await _repository.GetAll(apiKey);
     }
 
     [HttpGet("{nconst}")]
-    public async Task<ActionResult<Name>> Show(string nconst)
+    public async Task<ActionResult<Name>> Show(string apiKey, string nconst)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _repository.Find(nconst);
     }
 
     [HttpPost("")]
-    public async Task<ActionResult<Name>> Store(Name name)
+    public async Task<ActionResult<Name>> Store(string apiKey, Name name)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _repository.Store(name);
     }
 
     [HttpPut("{nconst}")]
-    public async Task<IActionResult> Update(string nconst, Name name)
+    public async Task<IActionResult> Update(string apiKey, string nconst, Name name)
     {
+        if (apiKey == null) throw new ArgumentNullException(nameof(apiKey));
         return await _repository.Update(nconst, name);
     }
 
     [HttpDelete("{nconst}")]
-    public async Task<IActionResult> Destroy(string nconst)
+    public async Task<IActionResult> Destroy(string apiKey, string nconst)
     {
+        if (nconst == null) throw new ArgumentNullException(nameof(nconst));
         return await _repository.Destroy(nconst);
     }
 }

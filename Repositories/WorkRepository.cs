@@ -5,7 +5,7 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Repositories;
 
-public class WorkRepository : ModelRepository
+public class WorkRepository : Repository
 {
     private readonly string _getWorksQuery = "CALL GetWorksByNconst({0})";
     private readonly string _getCastsQuery = "CALL GetCastsByTconst({0})";
