@@ -20,6 +20,7 @@ public partial class Context : DbContext
     public virtual DbSet<Title> Works { get; set; } = null!;
     public virtual DbSet<Cast> Casts { get; set; } = null!;
     public virtual DbSet<Account> Accounts { get; set; } = null!;
+    public virtual DbSet<Projection> AccountEvents { get; set; } = null!;
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -105,7 +106,7 @@ public partial class Context : DbContext
 
             entity.Property(e => e.ApiKey)
                 .HasMaxLength(32)
-                .HasColumnName("apiKey")
+                .HasColumnName("API_KEY")
                 .IsFixedLength();
 
             entity.Property(e => e.Plan)
@@ -116,6 +117,30 @@ public partial class Context : DbContext
             entity.Property(e => e.MonthlyCallsMade)
                 .HasColumnName("monthlyCallsMade")
                 .IsRequired();
+
+            entity.Property(e => e.RenewalDate)
+                .HasColumnName("renewalDate");
+        });
+
+        modelBuilder.Entity<Projection>(entity =>
+        {
+            entity.HasKey(e => e.ApiKey)
+                .HasName("PRIMARY");
+
+            entity.ToTable("account_events");
+
+            entity.Property(e => e.ApiKey)
+                .HasMaxLength(32)
+                .HasColumnName("API_KEY")
+                .IsFixedLength();
+            
+            entity.Property(e => e.Plan)
+                .HasMaxLength(40)
+                .HasColumnName("plan")
+                .IsRequired();
+            
+            entity.Property(e => e.RenewalDate)
+                .HasColumnName("renewalDate");
         });
         
         // Procedure Model
