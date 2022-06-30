@@ -29,7 +29,7 @@ public class AccountController : ControllerBase
         return $"API_KEY: {API_KEY}";
     }
 
-    /** Perform plan upgrade/downgrade mockup
+    /** Perform plan renewal mockup
      *  Payment is assumed to have succeeded
      *  
      */
@@ -42,6 +42,10 @@ public class AccountController : ControllerBase
         });
     }
 
+    /** Perform plan upgrade/downgrade mockup
+     *  Payment is assumed to have succeeded
+     *  
+     */
     [HttpPost("ChangePlan")]
     public async Task<IActionResult> ChangePlan(string apiKey, Account account)
     {

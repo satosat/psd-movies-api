@@ -37,13 +37,12 @@
    1. Nconst: the cast's ID
    2. PrimaryName: name of the cast
 
-### Endpoints
+### Resources Endpoints
 ##### Default
 1. GET `/{Model}`: returns all the resource on the database
-2. POST `/{Model}`: create a new resource 
 3. GET `/{Model}/{ID}`: show a resource, specified by the resource's ID (nconst/tconst)
-4. PUT `/{Model}/{ID}`: updates the specified resource
-5. DELETE `/{Model}/{ID}`: deletes the specified resource
 ##### Work
 1. GET `/Work/Movies/{nconst}`: return all the titles that's been done by the specified person 
 2. GET `/Work/Casts/{tconst}`: return all the casts(names) from the specified title
+
+#### NB: Account API isn't a part of resource 

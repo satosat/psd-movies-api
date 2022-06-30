@@ -1,13 +1,31 @@
-CREATE DATABASE  IF NOT EXISTS `moviesdb`; 
+CREATE DATABASE  IF NOT EXISTS `moviesdb`;
 USE `moviesdb`;
+
+DROP TABLE IF EXISTS `accounts`;
+CREATE TABLE `accounts` (
+                            `API_KEY` char(32) NOT NULL,
+                            `plan` varchar(40) NOT NULL,
+                            `monthlyCallsMade` int DEFAULT '0',
+                            `renewalDate` datetime DEFAULT CURRENT_TIMESTAMP,
+                            PRIMARY KEY (`API_KEY`)
+);
+
+DROP TABLE IF EXISTS `account_events`;
+CREATE TABLE `account_events` (
+                                  `API_KEY` char(32) NOT NULL,
+                                  `plan` varchar(40) NOT NULL,
+                                  `renewalDate` datetime NOT NULL,
+                                  KEY `API_KEY` (`API_KEY`),
+                                  CONSTRAINT `account_events_ibfk_1` FOREIGN KEY (`API_KEY`) REFERENCES `accounts` (`API_KEY`)
+);
 
 DROP TABLE IF EXISTS `names`;
 CREATE TABLE `names` (
-  `nconst` char(11) NOT NULL,
-  `primaryName` varchar(255) NOT NULL,
-  `birthYear` char(4) NOT NULL,
-  `deathYear` varchar(4) DEFAULT NULL,
-  PRIMARY KEY (`nconst`)
+                         `nconst` char(11) NOT NULL,
+                         `primaryName` varchar(255) NOT NULL,
+                         `birthYear` char(4) NOT NULL,
+                         `deathYear` varchar(4) DEFAULT NULL,
+                         PRIMARY KEY (`nconst`)
 );
 
 LOCK TABLES `names` WRITE;
@@ -16,11 +34,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `titles`;
 CREATE TABLE `titles` (
-  `tconst` varchar(11) NOT NULL,
-  `primaryTitle` varchar(255) NOT NULL,
-  `originalTitle` varchar(255) NOT NULL,
-  `startYear` char(4) NOT NULL,
-  PRIMARY KEY (`tconst`)
+    
+                          `tconst` varchar(11) NOT NULL,
+                          `primaryTitle` varchar(255) NOT NULL,
+                          `originalTitle` varchar(255) NOT NULL,
+                          `startYear` char(4) NOT NULL,
+                          PRIMARY KEY (`tconst`)
 );
 
 LOCK TABLES `titles` WRITE;
@@ -28,12 +47,11 @@ INSERT INTO `titles` VALUES ('tt0104952','My Cousin Vinny','My Cousin Vinny','19
 UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `ratings`;
-
 CREATE TABLE `ratings` (
-  `tconst` varchar(11) DEFAULT NULL,
-  `averageRating` float NOT NULL,
-  UNIQUE KEY `tconst` (`tconst`),
-  CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`tconst`) REFERENCES `titles` (`tconst`)
+                           `tconst` varchar(11) DEFAULT NULL,
+                           `averageRating` float NOT NULL,
+                           UNIQUE KEY `tconst` (`tconst`),
+                           CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`tconst`) REFERENCES `titles` (`tconst`)
 );
 
 LOCK TABLES `ratings` WRITE;
@@ -42,12 +60,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `works`;
 CREATE TABLE `works` (
-  `nconst` char(11) NOT NULL,
-  `tconst` varchar(11) NOT NULL,
-  KEY `tconst` (`tconst`),
-  KEY `workIndex` (`nconst`,`tconst`),
-  CONSTRAINT `works_ibfk_1` FOREIGN KEY (`nconst`) REFERENCES `names` (`nconst`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `works_ibfk_2` FOREIGN KEY (`tconst`) REFERENCES `titles` (`tconst`) ON DELETE CASCADE ON UPDATE CASCADE
+                         `nconst` char(11) NOT NULL,
+                         `tconst` varchar(11) NOT NULL,
+                         KEY `tconst` (`tconst`),
+                         KEY `workIndex` (`nconst`,`tconst`),
+                         CONSTRAINT `works_ibfk_1` FOREIGN KEY (`nconst`) REFERENCES `names` (`nconst`) ON DELETE CASCADE ON UPDATE CASCADE,
+                         CONSTRAINT `works_ibfk_2` FOREIGN KEY (`tconst`) REFERENCES `titles` (`tconst`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 LOCK TABLES `works` WRITE;
@@ -59,21 +77,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetCastsByTconst`(
     IN tconst CHAR(11)
 )
 BEGIN
-SELECT names.nconst, names.primaryName
-FROM works
-JOIN names ON names.nconst = works.nconst
-WHERE works.tconst = tconst;
+    SELECT names.nconst, names.primaryName
+    FROM works
+    JOIN names ON names.nconst = works.nconst
+    WHERE works.tconst = tconst;
 END ;;
 DELIMITER ;
 
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetWorksByNconst`(     
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetWorksByNconst`(    
     IN nconst CHAR(11) 
-    )
+)
 BEGIN 
-SELECT t.tconst, t.primaryTitle, t.originalTitle, t.startYear 
-FROM titles AS t 
-JOIN works AS w ON w.tconst = t.tconst 
-WHERE w.nconst = nconst; 
+    SELECT t.tconst, t.primaryTitle, t.originalTitle, t.startYear 
+    FROM titles AS t 
+    JOIN works AS w ON w.tconst = t.tconst 
+    WHERE w.nconst = nconst; 
 END ;;
 DELIMITER ;
